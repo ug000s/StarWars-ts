@@ -1,13 +1,10 @@
 import {useEffect, useState} from "react";
-import {periodMonth, characters, defaultHero} from "../utils/constants.ts";
-import {useParams} from "react-router";
+import {periodMonth, characters} from "../utils/constants.ts";
 import ErrorPage from "./ErrorPage.tsx";
-import {SWContext} from "../utils/context.ts";
-import {useContext} from "react";
+import {useValidHero} from "../hooks/customHooks.ts";
 
 const AboutMe = () => {
-    const {changeHero} = useContext(SWContext);
-    const {heroId = defaultHero} = useParams();
+    const {isHeroValid, heroId} = useValidHero();
     // const params = useParams();
     // console.log(params.heroId);
     const [hero, setHero] = useState(() => {
@@ -21,8 +18,7 @@ const AboutMe = () => {
         if (!(heroId in characters)) {
             return;
         }
-        changeHero(heroId);
-        if (!hero) {
+        if (isHeroValid && !hero) {
             // keyof typeof characters ensures we're using a valid key from the characters object
             // typeof object -> generate type of this object
             fetch(characters[heroId].url)
@@ -45,9 +41,9 @@ const AboutMe = () => {
                     }));
                 })
         }
-    }, [heroId, changeHero, hero]);
+    }, [heroId, hero, isHeroValid]);
 
-    return (heroId in characters) ? (
+    return (isHeroValid) ? (
         <>
             {(!!hero) &&
                 <div className={'text-3xl text-justify tracking-widest leading-14 ml-8'}>

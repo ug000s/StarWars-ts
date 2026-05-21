@@ -1,0 +1,22 @@
+import { useContext } from "react";
+import { SWContext } from "../utils/context.ts";
+import { useParams } from "react-router";
+import { useEffect } from "react";
+import { characters, defaultHero } from "../utils/constants.ts";
+
+export const useValidHero = () => {
+    const {changeHero} = useContext(SWContext);
+    const {heroId = defaultHero} = useParams();
+
+    useEffect(() => {
+        if (!(heroId in characters)) {
+            return;
+        }
+        changeHero(heroId);
+    }, [heroId, changeHero]);
+
+    return {
+        heroId,
+        isHeroValid: heroId in characters
+    }
+}
