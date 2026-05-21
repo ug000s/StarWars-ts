@@ -2,6 +2,7 @@ import {useContext} from "react";
 import {SWContext} from "../utils/context.ts";
 import Button from "./ui/Button";
 import {NavLink} from "react-router";
+import {defaultHero} from "../utils/constants.ts";
 
 interface NavItemProps {
     itemTitle: string;
@@ -10,8 +11,9 @@ interface NavItemProps {
 const NavItem = ({itemTitle}: NavItemProps) => {
         const {hero} = useContext(SWContext);
 
+    // || если hero пустой, то используем defaultHero
     return (
-    <NavLink to={`/${itemTitle.toLowerCase()}/${hero}`}>
+    <NavLink to={`/${itemTitle.toLowerCase()}/${hero || defaultHero}`}>
         <Button>{itemTitle}</Button>
     </NavLink>
     )
