@@ -1,4 +1,6 @@
+import { NavLink } from "react-router";
 import { characters } from "../utils/constants";
+import { navItems } from "../utils/constants";
 
 interface FriendProps {
     friend: keyof typeof characters;
@@ -16,7 +18,9 @@ const Friend = ({friend, pos}: FriendProps) => {
     }
 
     return (
-        <img className={styles} src={characters[friend].img} alt={characters[friend].name}/>
+        <NavLink to={`/${navItems[0].toLowerCase()}/${friend}`}>
+            <img className={styles} src={characters[friend].img} alt={characters[friend].name}/>
+        </NavLink>
     )
 }
 

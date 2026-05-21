@@ -14,7 +14,7 @@ const StarWars = () => {
             return;
         }
         changeHero(heroId);
-    }, []);
+    }, [heroId, changeHero]);
 
     return (heroId in characters) ? <Text>{starWarsInfo}</Text> : <ErrorPage/>;
 }

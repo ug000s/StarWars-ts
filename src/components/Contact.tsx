@@ -22,7 +22,7 @@ const Contact = () => {
             return;
         }
         changeHero(heroId);
-    }, []);    
+    }, [heroId, changeHero]);    
 
     useEffect(() => {
         const getPlanets = async () => {
@@ -40,7 +40,7 @@ const Contact = () => {
             getPlanets().then(() => console.log('Planets were loaded'));
         }
         return () => console.log('Contact component unmounted');
-    }, [])
+    }, [planets.length])
 
     return (heroId in characters) ? ( 
         <form className="w-4/5 rounded-[5px] bg-[#f2f2f2] mx-auto p-5 my-2" onSubmit={e => {
