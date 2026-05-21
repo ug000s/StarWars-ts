@@ -6,15 +6,12 @@ import {navItems} from "./utils/constants.ts";
 import {SWContext} from "./utils/context.ts";
 
 function App() {
-    const [page, setPage] = useState(navItems[0]);
 
     return (
         <div className={'mx-2'}>
-            <SWContext value={{page, changePage: setPage}}>
-                <Header/>
-                <Main/>
-                <Footer/>
-            </SWContext>
+            <Header/>
+            <Main/>
+            <Footer/>
         </div>
     )
 }
