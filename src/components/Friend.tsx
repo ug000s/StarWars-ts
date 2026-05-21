@@ -1,5 +1,7 @@
+import { characters } from "../utils/constants";
+
 interface FriendProps {
-    friend: string;
+    friend: keyof typeof characters;
     pos: number;
 }
 
@@ -14,7 +16,7 @@ const Friend = ({friend, pos}: FriendProps) => {
     }
 
     return (
-        <img className={styles} src={friend} alt="Friend"/>
+        <img className={styles} src={characters[friend].img} alt={characters[friend].name}/>
     )
 }
 
