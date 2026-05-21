@@ -2,8 +2,11 @@ import {useEffect, useState} from "react";
 import {periodMonth, characters, defaultHero} from "../utils/constants.ts";
 import {useParams} from "react-router";
 import ErrorPage from "./ErrorPage.tsx";
+import {SWContext} from "../utils/context.ts";
+import {useContext} from "react";
 
 const AboutMe = () => {
+    const {changeHero} = useContext(SWContext);
     const {heroId = defaultHero} = useParams();
     // const params = useParams();
     // console.log(params.heroId);
@@ -18,10 +21,11 @@ const AboutMe = () => {
         if (!(heroId in characters)) {
             return;
         }
+        changeHero(heroId);
         if (!hero) {
             // keyof typeof characters ensures we're using a valid key from the characters object
             // typeof object -> generate type of this object
-            fetch(characters[heroId as keyof typeof characters].url)
+            fetch(characters[heroId].url)
                 .then(res => res.json())
                 .then(data => {
                     const info = {

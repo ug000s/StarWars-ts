@@ -9,7 +9,7 @@ import {Route, Routes} from "react-router";
 import ErrorPage from "./ErrorPage.tsx";
 
 const Main = () => {
-    const {page} = useContext(SWContext);
+    const {hero} = useContext(SWContext);
 
     return (
     <Routes>
