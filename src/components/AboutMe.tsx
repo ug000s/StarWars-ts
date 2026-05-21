@@ -1,17 +1,27 @@
 import {useEffect, useState} from "react";
-import {baseUrl, periodMonth} from "../utils/constants.ts";
+import {periodMonth, characters, defaultHero} from "../utils/constants.ts";
+import {useParams} from "react-router";
+import ErrorPage from "./ErrorPage.tsx";
 
 const AboutMe = () => {
+    const {heroId = defaultHero} = useParams();
+    // const params = useParams();
+    // console.log(params.heroId);
     const [hero, setHero] = useState(() => {
-        const hero = JSON.parse(localStorage.getItem('hero')!);
+        const hero = JSON.parse(localStorage.getItem(heroId)!);
         if(hero && (Date.now() - hero.timestamp < periodMonth)) {
             return hero.payload;
         }
     });
 
     useEffect(() => {
+        if (!(heroId in characters)) {
+            return;
+        }
         if (!hero) {
-            fetch(`${baseUrl}/v1/peoples/1`)
+            // keyof typeof characters ensures we're using a valid key from the characters object
+            // typeof object -> generate type of this object
+            fetch(characters[heroId as keyof typeof characters].url)
                 .then(res => res.json())
                 .then(data => {
                     const info = {
@@ -25,7 +35,7 @@ const AboutMe = () => {
                         ['Skin color']: data.skin_color,
                     };
                     setHero(info);
-                    localStorage.setItem('hero', JSON.stringify({
+                    localStorage.setItem(heroId, JSON.stringify({
                         payload: info,
                         timestamp: Date.now()
                     }));
@@ -33,7 +43,7 @@ const AboutMe = () => {
         }
     }, []);
 
-    return (
+    return (heroId in characters) ? (
         <>
             {(!!hero) &&
                 <div className={'text-3xl text-justify tracking-widest leading-14 ml-8'}>
@@ -43,7 +53,7 @@ const AboutMe = () => {
                 </div>
             }
         </>
-    )
+    ) : <ErrorPage />
 }
 
 export default AboutMe;
