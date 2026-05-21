@@ -1,5 +1,8 @@
-import {baseUrl, periodMonth} from "../utils/constants.ts";
-import {useEffect, useState} from "react";
+import {baseUrl, characters, defaultHero, periodMonth} from "../utils/constants.ts";
+import {useContext, useEffect, useState} from "react";
+import { SWContext } from "../utils/context.ts";
+import { useParams } from "react-router";
+import ErrorPage from "./ErrorPage.tsx";
 
 const Contact = () => {
     const [planets, setPlanets] = useState<string[]>(() => {
@@ -10,6 +13,16 @@ const Contact = () => {
             return ['wait...']
         }
     });
+
+    const {changeHero} = useContext(SWContext);
+    const {heroId = defaultHero} = useParams();
+
+    useEffect(() => {
+        if (!(heroId in characters)) {
+            return;
+        }
+        changeHero(heroId);
+    }, []);    
 
     useEffect(() => {
         const getPlanets = async () => {
@@ -29,7 +42,7 @@ const Contact = () => {
         return () => console.log('Contact component unmounted');
     }, [])
 
-    return (
+    return (heroId in characters) ? ( 
         <form className="w-4/5 rounded-[5px] bg-[#f2f2f2] mx-auto p-5 my-2" onSubmit={e => {
             e.preventDefault();
         }}>
@@ -50,7 +63,7 @@ const Contact = () => {
             </label>
             <button className={'bg-[#04AA6D] text-white py-3 px-5 border-none rounded-sm cursor-pointer hover:bg-[#45a049]'} type="submit">Submit</button>
         </form>
-    )
+    ) : <ErrorPage/>
 }
 
 export default Contact;
